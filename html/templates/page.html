@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        header{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        article {
+         
+            text-align: center;
+            color: #ffffff;
+            display: flex;
+        }
+        .niceButton2{
+            position: relative;
+            background-color: rgb(32, 93, 224);
+            border: none;
+            font-size: 20px;
+            color: #ffffff;
+            padding: 20px;
+            width: 150px;
+            text-align: center;
+            transition-duration: 0.6s;
+            text-decoration: none;
+            overflow: hidden;
+            cursor: pointer;
+            border-radius:10px;
+        }
+        .niceButton2::after{
+            content: '';
+            background:#53a4f0;
+            display: block;
+            position: absolute;
+            padding-top: 300%;
+            padding-left: 350%;
+            margin-left: -20px !important;
+            margin-top: -120%;
+            opacity: 0;
+            transition:all 0.8s;
+        }
+        .niceButton2:active::after{
+            padding: 0;
+            margin: 0;
+            opacity: 1;
+            transition: 0s;
+        }
+        .left{
+            flex: 1;
+            /* background-color: skyblue; */
+        }
+        .right{
+            width: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            /* background-color: pink; */
+        }
+        .btn{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+        }
+        .editor_text{
+            width: 400px;
+        }
+        #fall{
+            visibility: hidden;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            z-index: 99;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>摔倒检测</h1>
+    </header>
+    <article>
+        <div class="left"><img src="{{ url_for('video_feed') }}"></div>
+        <div class="right">
+            <div class="btn">
+                <button class="niceButton2" id="start">
+                    开始检测
+                </button>
+                <button class="niceButton2" id="end">
+                    结束检测
+                </button>
+            </div>
+            <div>
+                <textarea class = "editor_text" id = "runMess" name = "RunMessage" rows="15" cols="40"   	 onfocus="this.scrollTop = this.scrollHeight"></textarea>
+            </div>
+        </div> 
+    </article>
+    
+    <img id='fall' src="static/fall.gif">
+    
+       
+      
+     
+
+    
+    <script>
+        function outMess(){
+            /* alert(DATA.user_rule); */
+            $.ajax
+            ({
+                url:'/log',//此处为后端函数的路由
+                type:'GET',
+                data:{},					//此处data为前端发给后端的数据
+                success:function(data)  //此处data为后端返回的json数据
+                    {       
+                            
+                            data = JSON.parse(data)
+                            if(data.out.split(' ')[2] == '监测到有人摔倒，请及时处理'){
+                                let pic = document.querySelector('#fall')
+                                pic.style.visibility = 'visible'
+                            }else{
+                                let pic = document.querySelector('#fall')
+                                pic.style.visibility = 'hidden'
+                            }
+                            let outMessTextarea = document.querySelector("#runMess");
+                            outMessTextarea.innerHTML += data.out+'\n';
+                            outMessTextarea.scrollTop=outMessTextarea.scrollHeight;//始终置于最后一行
+                    }
+            });
+        }
+    let timer1; 
+    // clearInterval(timer1);  //关闭定时器，不再继续刷新输出
+     document.querySelector('#start').addEventListener('click',()=>{
+        timer1 = setInterval(outMess,1000)
+     })
+     document.querySelector('#end').addEventListener('click',()=>{
+        clearInterval(timer1)
+     })
+    </script>
+</body>
+
+</html>
