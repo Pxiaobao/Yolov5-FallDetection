@@ -55,7 +55,11 @@ def run(
         source,  # file/dir/URL/glob, 0 for webcam
         data,  # dataset.yaml path
         imgsz=(640, 640),  # 输入图片的大小，默认为640*640，inference size (height, width)
+<<<<<<< HEAD
         conf_thres=0.80,  # confidence threshold，置信度阈值，默认为25
+=======
+        conf_thres=0.25,  # confidence threshold，置信度阈值，默认为25
+>>>>>>> 75b832c2c17149515f9363481ea64444ffaca79e
         iou_thres=0.45,  # NMS IOU threshold 做nms的阈值，默认为45
         max_det=10,  # maximum detections per image
         device='',  # cuda device, i.e. 0 or 0,1,2,3 or cpu
@@ -78,7 +82,11 @@ def run(
         half=False,  # use FP16 half-precision inference
         dnn=False,  # use OpenCV DNN for ONNX inference
 ):
+<<<<<<< HEAD
     # classes = 0 #设置显示预测的类型，只显示第0类
+=======
+    classes = 0 #设置显示预测的类型，只显示第0类
+>>>>>>> 75b832c2c17149515f9363481ea64444ffaca79e
     source = str(source)
     #endswith() 方法用于判断字符串是否以指定后缀结尾，是否保存图片和txt文件
     save_img = not nosave and not source.endswith('.txt')  # save inference images
@@ -101,8 +109,12 @@ def run(
     stride, names, pt = model.stride, model.names, model.pt
     # 确保输入图片的尺寸 能整除stride=32 如果不能整除则调整为能整除
     imgsz = check_img_size(imgsz, s=stride)  # check image size
+<<<<<<< HEAD
     # 定义一个摔倒图像的初始值
     sum=0
+=======
+
+>>>>>>> 75b832c2c17149515f9363481ea64444ffaca79e
     # Dataloader
     # 使用视频流或者页面
     if webcam:
@@ -166,7 +178,10 @@ def run(
             imc = im0.copy() if save_crop else im0  # for save_crop
             annotator = Annotator(im0, line_width=line_thickness, example=str(names))
             if len(det):
+<<<<<<< HEAD
                 sum+=1
+=======
+>>>>>>> 75b832c2c17149515f9363481ea64444ffaca79e
                 # Rescale boxes from img_size to im0 size
                 det[:, :4] = scale_coords(im.shape[2:], det[:, :4], im0.shape).round()
 
@@ -174,8 +189,11 @@ def run(
                 for c in det[:, -1].unique():
                     n = (det[:, -1] == c).sum()  # detections per class
                     s += f"{n} {names[int(c)]}{'s' * (n > 1)}, "  # add to string
+<<<<<<< HEAD
                     if(names[int(c)]=='fall' and sum>3):
                         print('fall')
+=======
+>>>>>>> 75b832c2c17149515f9363481ea64444ffaca79e
 
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
@@ -192,8 +210,12 @@ def run(
                         annotator.box_label(xyxy, label, color=colors(c, True))
                     if save_crop:
                         save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
+<<<<<<< HEAD
             else:
                 sum=0
+=======
+
+>>>>>>> 75b832c2c17149515f9363481ea64444ffaca79e
             # Stream results
             im0 = annotator.result()
             if view_img:
@@ -253,7 +275,11 @@ def run(
 
 
         # Print time (inference-only)
+<<<<<<< HEAD
         # LOGGER.info(f'{s}Done. ({t3 - t2:.3f}s)')
+=======
+        LOGGER.info(f'{s}Done. ({t3 - t2:.3f}s)')
+>>>>>>> 75b832c2c17149515f9363481ea64444ffaca79e
 
     # Print results
     t = tuple(x / seen * 1E3 for x in dt)  # speeds per image
@@ -267,6 +293,7 @@ def run(
 
 def parse_opt():
     parser = argparse.ArgumentParser()
+<<<<<<< HEAD
     parser.add_argument('--weights', nargs='+', type=str, default='D:\Project\positionDetect\yolov5-master\yolov5-master\\runs/train/exp3/weights/best.pt', help='model path(s)')
     # parser.add_argument('--source', type=str, default="D:\Project\positionDetect\yolov5-master\yolov5-master\\59789586-1-192.mp4", help='file/dir/URL/glob, 0 for webcam')
     parser.add_argument('--source', type=str, default="0", help='file/dir/URL/glob, 0 for webcam')
@@ -274,6 +301,14 @@ def parse_opt():
     parser.add_argument('--imgsz', '--img', '--img-size', nargs='+', type=int, default=[640], help='inference size h,w')
     parser.add_argument('--conf-thres', type=float, default=0.8, help='confidence threshold')
     parser.add_argument('--iou-thres', type=float, default=0.5, help='NMS IoU threshold')
+=======
+    parser.add_argument('--weights', nargs='+', type=str, default='D:\Project\positionDetect\yolov5-master\yolov5-master\\runs/train/exp24/weights/best.pt', help='model path(s)')
+    parser.add_argument('--source', type=str, default='0', help='file/dir/URL/glob, 0 for webcam')
+    parser.add_argument('--data', type=str, default='D:\Project\positionDetect\yolov5-master\yolov5-master\data\\fall.yaml', help='(optional) dataset.yaml path')
+    parser.add_argument('--imgsz', '--img', '--img-size', nargs='+', type=int, default=[640], help='inference size h,w')
+    parser.add_argument('--conf-thres', type=float, default=0.25, help='confidence threshold')
+    parser.add_argument('--iou-thres', type=float, default=0.45, help='NMS IoU threshold')
+>>>>>>> 75b832c2c17149515f9363481ea64444ffaca79e
     parser.add_argument('--max-det', type=int, default=1000, help='maximum detections per image')
     parser.add_argument('--device', default='', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
     parser.add_argument('--view-img', action='store_true', help='show results')
